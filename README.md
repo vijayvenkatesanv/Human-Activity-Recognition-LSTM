@@ -1,2 +1,16 @@
 # Human-Activity-Recognition-LSTM
 This project uses MATLAB to classify six human activities from mobile accelerometer data. LSTM and BiLSTM models were trained, with BiLSTM showing better overall performance.
+
+
+Summary of My LSTM-Based Human Activity Signal Classification Using MATLAB
+In this project, I implemented a complete workflow for classifying human activity using Long Short-Term Memory (LSTM) networks in MATLAB. The classification task involved recognizing six activities—sitting, standing, lying, walking, walking upstairs, and walking downstairs—based on time-series accelerometer signals collected from smartphones. The dataset contained triaxial acceleration data sampled at 50 Hz from 30 participants.
+
+I began by loading the humanActivity.mat file, which included 661,056 samples representing concatenated recordings from all subjects. I extracted the X-axis component of the accelerometer signal for simplicity and processed it further. For signal labeling, I used MATLAB’s Signal Labeler App, where I imported a portion of the signal, defined label categories (like "Standing", "Walking", etc.), and assigned labels to specific regions based on their time indices. After completing the labeling process for a subset, I loaded a pre-labeled full dataset (labels.mat) to save time.
+
+Once the data was labeled, I moved on to signal preprocessing using the Signal Analyzer App. I applied a high-pass digital filter with a 0.6 Hz passband to eliminate slow-varying low-frequency components (mainly due to gravity), ensuring the signal reflected only motion-based activity. I then segmented the filtered signal using the buffer function to create overlapping windows of 128 samples each, with 50% overlap (64 samples). This resulted in 10,328 segments.
+
+To align the labels with the segmented signals, I used the framelbl function to assign the most frequent label to each segment (using mode consolidation). This produced a label vector matching the number of signal segments. I then partitioned the data into training (80%), validation (10%), and testing (10%) sets using splitlabels, and stored them in Xtrain, Xvalid, and Xtest, respectively, with corresponding labels in Ytrain, Yvalid, and Ytest.
+
+Following this, I built and configured an LSTM-based neural network using MATLAB’s Deep Network Designer App. I started with a sequence input layer (with input size set to 1), followed by an LSTM layer (50 hidden units), and ended with a fully connected layer, softmax, and classification layer. The network was designed for sequence-to-label classification, using time-distributed learning across the 128-sample segments. I trained the model using the training set while monitoring performance on the validation set to avoid overfitting.
+
+In conclusion, this end-to-end workflow—starting from signal access, labeling, filtering, buffering, label alignment, dataset partitioning, and finally deep learning model training—enabled me to accurately classify human physical activities from time-series motion data. This approach not only showcased the strengths of LSTM networks for temporal classification but also highlighted the capabilities of MATLAB’s integrated tools for signal processing and deep learning.
